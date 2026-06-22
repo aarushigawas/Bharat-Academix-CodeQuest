@@ -72,6 +72,7 @@ export default function PlannerPage() {
 
       const data = await response.json();
 
+<<<<<<< HEAD
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
@@ -79,15 +80,37 @@ export default function PlannerPage() {
       if (!data.response) {
         console.error('No response data received:', data);
         alert('Failed to get recommendation: No response data');
+=======
+      console.log("FULL DATA:", data);
+      console.log("data.response:", data.response);
+
+      if (!data.response) {
+        alert(
+          "API did not return a response.\n\n" +
+          JSON.stringify(data, null, 2)
+        );
+
+>>>>>>> 72863adeb1f50c734c9d1ba767df925835094767
         setShowLoader(false);
         return;
       }
 
+<<<<<<< HEAD
       console.log('FULL DATA:', data);
       console.log('data.response:', data.response);
       console.log('API Response:', data);
       localStorage.setItem('recommendation', JSON.stringify(data.response));
       console.log('Gemini Response:', data);
+=======
+      localStorage.setItem(
+        "recommendation",
+        JSON.stringify(data.response)
+      );
+
+console.log("Saved recommendation:");
+console.log(data.response);
+
+>>>>>>> 72863adeb1f50c734c9d1ba767df925835094767
       // navigation happens in onComplete callback below
     } catch (error) {
       console.error(error);
