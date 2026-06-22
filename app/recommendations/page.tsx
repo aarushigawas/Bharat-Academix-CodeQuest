@@ -9,13 +9,22 @@ export default function RecommendationsPage() {
   const [recommendation, setRecommendation] = useState<any>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem('recommendation');
+    const stored = localStorage.getItem("recommendation");
 
-    if (stored) {
+    console.log("Stored recommendation:", stored);
+
+    if (
+      stored &&
+      stored !== "undefined" &&
+      stored !== "null"
+    ) {
       try {
         setRecommendation(JSON.parse(stored));
       } catch (error) {
-        console.error('Failed to parse recommendation:', error);
+        console.error(
+          "Failed to parse recommendation:",
+          error
+        );
       }
     }
   }, []);
@@ -54,7 +63,7 @@ export default function RecommendationsPage() {
             <span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 px-3 py-1 rounded-full text-sm font-medium">
               {recommendation.confidence > 1
   ? Math.round(recommendation.confidence)
-  : Math.round(recommendation.confidence * 100)}% Match
+  : Math.round(recommendation.confidence)}% Match
             </span>
           </div>
 
@@ -126,7 +135,7 @@ export default function RecommendationsPage() {
                   <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-medium">
                     {rec.confidence > 1
   ? Math.round(rec.confidence)
-  : Math.round(rec.confidence * 100)}% Match
+  : Math.round(rec.confidence)}% Match
                   </span>
 
                 </div>
@@ -139,7 +148,7 @@ export default function RecommendationsPage() {
                     </span>
 
                     <span className="font-medium text-gray-900 dark:text-white">
-                      {Math.round(rec.confidence * 100)}%
+                      {Math.round(rec.confidence)}%
                     </span>
                   </div>
 
