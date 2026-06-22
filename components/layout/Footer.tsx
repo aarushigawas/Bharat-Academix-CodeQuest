@@ -2,32 +2,52 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-4 md:mb-0">
-            <span className="text-xl font-bold text-green-600 dark:text-green-400">
-              AgriSense AI
-            </span>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Empowering farmers with AI-driven insights
-            </p>
+    <footer
+      className="py-10 px-6 mt-0"
+      style={{
+        background: '#0a1628',
+        borderTop: '1px solid rgba(255,255,255,0.06)',
+        fontFamily: "'Inter', sans-serif",
+      }}
+    >
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex items-center gap-2.5">
+          <div
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold"
+            style={{ background: 'linear-gradient(135deg, #16a34a, #15803d)' }}
+          >
+            🌱
           </div>
-          <div className="flex space-x-6">
-            <Link href="/about" className="text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400">
-              About
-            </Link>
-            <Link href="/planner" className="text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400">
-              Crop Planner
-            </Link>
-            <Link href="/recommendations" className="text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400">
-              Recommendations
-            </Link>
-          </div>
+          <span
+            className="text-white font-bold text-sm tracking-tight"
+            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+          >
+            Agri<span className="text-green-400">Sense</span> AI
+          </span>
         </div>
-        <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 text-center text-sm text-gray-600 dark:text-gray-400">
-          <p>&copy; {new Date().getFullYear()} AgriSense AI. All rights reserved.</p>
-        </div>
+
+        <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+          {[
+            { label: 'Home', href: '/home' },
+            { label: 'Crop Planner', href: '/planner' },
+            { label: 'Recommendations', href: '/recommendations' },
+            { label: 'Market', href: '/market' },
+            { label: 'History', href: '/history' },
+            { label: 'About', href: '/about' },
+          ].map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="text-gray-500 hover:text-green-400 text-sm transition-colors"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </nav>
+
+        <p className="text-gray-600 text-xs">
+          © {new Date().getFullYear()} AgriSense AI
+        </p>
       </div>
     </footer>
   );
