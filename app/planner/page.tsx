@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import AILoadingScreen from './components/AILoadingScreen';
 import type { PlannerFormData } from './types';
 
-// ── Field wrapper ────────────────────────────────────────────────────────────
+// -- Field wrapper ------------------------------------------------------------
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -21,7 +21,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-// ── Shared input styles ──────────────────────────────────────────────────────
+// -- Shared input styles ------------------------------------------------------
 const inputCls =
   'w-full px-4 py-3 rounded-xl text-white text-sm font-medium outline-none transition-all duration-200 placeholder:text-white/25';
 const inputStyle = {
@@ -40,9 +40,9 @@ const inputBlurHandler = (e: React.FocusEvent<HTMLInputElement | HTMLSelectEleme
   e.currentTarget.style.boxShadow = 'none';
 };
 
-// ── Main ─────────────────────────────────────────────────────────────────────
+// -- Main ---------------------------------------------------------------------
 export default function PlannerPage() {
-  // ── All original state — untouched ──
+  // -- All original state � untouched --
   const [formData, setFormData] = useState<PlannerFormData>({
     location: '',
     soilType: '',
@@ -58,7 +58,7 @@ export default function PlannerPage() {
   const waterOptions = ['High', 'Medium', 'Low'];
   const riskOptions = ['Low', 'Medium', 'High'];
 
-  // ── Original handleSubmit — only added setShowLoader ──
+  // -- Original handleSubmit � only added setShowLoader --
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setShowLoader(true); // show loading screen
@@ -72,8 +72,19 @@ export default function PlannerPage() {
 
       const data = await response.json();
 
-console.log("FULL DATA:", data);
-console.log("data.response:", data.response);
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      if (!data.response) {
+        console.error('No response data received:', data);
+        alert('Failed to get recommendation: No response data');
+        setShowLoader(false);
+        return;
+      }
+
+      console.log('FULL DATA:', data);
+      console.log('data.response:', data.response);
       console.log('API Response:', data);
       localStorage.setItem('recommendation', JSON.stringify(data.response));
       console.log('Gemini Response:', data);
@@ -125,7 +136,7 @@ console.log("data.response:", data.response);
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-16 min-h-screen flex items-center">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 w-full items-center">
 
-            {/* ── LEFT: illustration panel ── */}
+            {/* -- LEFT: illustration panel -- */}
             <motion.div
               variants={fadeUp}
               initial="hidden"
@@ -164,14 +175,14 @@ console.log("data.response:", data.response);
                     AI-Powered Precision
                   </p>
                   <p className="text-green-300/70 text-xs leading-relaxed">
-                    Soil, water, market & risk — analyzed in seconds to surface your best crop.
+                    Soil, water, market & risk � analyzed in seconds to surface your best crop.
                   </p>
                 </div>
               </div>
 
               {/* Trust pills */}
               <div className="flex gap-3 flex-wrap">
-                {['🌍 Location-aware', '🧪 Soil analysis', '📊 Market-linked'].map((tag) => (
+                {['?? Location-aware', '?? Soil analysis', '?? Market-linked'].map((tag) => (
                   <span
                     key={tag}
                     className="text-xs font-medium px-3.5 py-1.5 rounded-full"
@@ -187,7 +198,7 @@ console.log("data.response:", data.response);
               </div>
             </motion.div>
 
-            {/* ── RIGHT: form panel ── */}
+            {/* -- RIGHT: form panel -- */}
             <motion.div
               variants={fadeUp}
               initial="hidden"
@@ -268,7 +279,7 @@ console.log("data.response:", data.response);
                     </select>
                   </Field>
 
-                  {/* Farm Size + Water — 2 col */}
+                  {/* Farm Size + Water � 2 col */}
                   <div className="grid grid-cols-2 gap-4">
                     <Field label="Farm Size (acres)">
                       <input
@@ -307,7 +318,7 @@ console.log("data.response:", data.response);
                     </Field>
                   </div>
 
-                  {/* Budget + Risk — 2 col */}
+                  {/* Budget + Risk � 2 col */}
                   <div className="grid grid-cols-2 gap-4">
                     <Field label="Budget (INR)">
                       <input

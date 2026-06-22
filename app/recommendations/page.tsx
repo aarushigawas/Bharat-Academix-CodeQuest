@@ -11,11 +11,13 @@ export default function RecommendationsPage() {
   useEffect(() => {
     const stored = localStorage.getItem('recommendation');
 
-    if (stored) {
+    if (stored && stored !== 'undefined' && stored !== 'null') {
       try {
-        setRecommendation(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        setRecommendation(parsed);
       } catch (error) {
         console.error('Failed to parse recommendation:', error);
+        localStorage.removeItem('recommendation');
       }
     }
   }, []);
@@ -23,8 +25,16 @@ export default function RecommendationsPage() {
   if (!recommendation) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="text-xl font-semibold text-gray-900 dark:text-white">
-          Loading recommendations...
+        <div className="text-center">
+          <div className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+            No recommendation found
+          </div>
+          <Link
+            href="/planner"
+            className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+          >
+            Get Recommendation
+          </Link>
         </div>
       </div>
     );
