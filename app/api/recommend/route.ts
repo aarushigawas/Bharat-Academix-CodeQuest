@@ -1,12 +1,43 @@
 import { NextResponse } from "next/server";
 import { model } from "@/lib/ai/gemini";
+import { retrieveRelevantDocuments } from "@/lib/rag/retrieval";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
+    const query = `
+    ${body.location}
+    ${body.soilType}
+    ${body.waterAvailability}
+    ${body.riskPreference}
+    `;
+
+    const retrievedDocs =
+      await retrieveRelevantDocuments(query);
+
+    const context =
+      retrievedDocs
+        .map((doc) => doc.content)
+        .join("\n\n");
+
+    console.log(
+      "Retrieved Docs:",
+      retrievedDocs
+    );
+    // );
+
     const prompt = `
 You are an agricultural expert.
+
+Use the agricultural knowledge below
+while generating recommendations.
+
+AGRICULTURAL KNOWLEDGE:
+
+${context}
+
+Farmer Details:
 
 Location: ${body.location}
 Soil Type: ${body.soilType}
@@ -23,6 +54,7 @@ Recommend:
 4. Estimated profit
 5. Risk level
 6. Water requirement
+7. Short explanation
 
 Return ONLY JSON.
 
@@ -33,6 +65,7 @@ Return ONLY JSON.
   "profit":"",
   "risk":"",
   "water":"",
+  "reason":"",
   "alternatives":[
     {
       "crop":"",
@@ -50,8 +83,16 @@ const cleanedResponse = result.response
   .replace(/```/g, "")
   .trim();
 
+const parsedResponse =
+  JSON.parse(cleanedResponse);
+
 return NextResponse.json({
-  response: JSON.parse(cleanedResponse),
+  response: parsedResponse,
+
+  sources:
+    retrievedDocs.map(
+      (doc) => doc.source
+    ),
 });
 
   } catch (error) {

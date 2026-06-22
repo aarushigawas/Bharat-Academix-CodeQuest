@@ -1,62 +1,74 @@
-// TODO: Implement retrieval logic for RAG system
-// This will search the vector database for relevant agricultural knowledge
-// Current implementation uses local text files for hackathon simplicity
-// TODO: Future enhancement - Replace with vector database (Pinecone, Weaviate, or Supabase pgvector)
-// TODO: Future enhancement - Generate embeddings using Gemini API for similarity search
+import fs from "fs";
+import path from "path";
 
-import fs from 'fs/promises';
-import path from 'path';
-
-export interface RetrievedDocument {
-  content: string;
+type RetrievedDocument = {
   source: string;
-  similarity: number;
-  metadata?: Record<string, any>;
-}
+  content: string;
+  score: number;
+};
 
 export async function retrieveRelevantDocuments(
-  query: string,
-  topK: number = 5
+  query: string
 ): Promise<RetrievedDocument[]> {
-  const lowerQuery = query.toLowerCase();
+  const files = [
+    "rabi.txt",
+    "kharif.txt",
+    "nmsa.txt",
+  ];
 
-  let fileName = 'wheat.txt';
+  const results: RetrievedDocument[] = [];
 
-  if (lowerQuery.includes('rice')) {
-    fileName = 'rice.txt';
-  } else if (
-    lowerQuery.includes('maize') ||
-    lowerQuery.includes('corn')
-  ) {
-    fileName = 'maize.txt';
+  for (const file of files) {
+    const text = fs.readFileSync(
+      path.join(
+        process.cwd(),
+        "public",
+        "knowledge",
+        file
+      ),
+      "utf8"
+    );
+
+    const chunks: string[] = [];
+      for (
+        let i = 0;
+        i < text.length;
+        i += 1500
+      ) {
+        chunks.push(
+          text.slice(i, i + 1500)
+        );
+      }
+
+    for (const chunk of chunks) {
+      let score = 0;
+
+      const words = query
+        .toLowerCase()
+        .split(/\s+/);
+
+      words.forEach((word) => {
+        if (
+          word.length > 2 &&
+          chunk
+            .toLowerCase()
+            .includes(word)
+        ) {
+          score++;
+        }
+      });
+
+      if (score > 0) {
+        results.push({
+          source: file,
+          content: chunk,
+          score,
+        });
+      }
+    }
   }
 
-  const filePath = path.join(
-    process.cwd(),
-    'data',
-    'crops',
-    fileName
-  );
-
-  const content = await fs.readFile(
-    filePath,
-    'utf-8'
-  );
-
-  return [
-    {
-      content,
-      source: fileName,
-      similarity: 1.0,
-    },
-  ];
-}
-
-export async function retrieveWithFilters(
-  query: string,
-  filters: Record<string, any>,
-  topK: number = 5
-): Promise<RetrievedDocument[]> {
-  // TODO: Implement filtered retrieval
-  return [];
+  return results
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5);
 }
