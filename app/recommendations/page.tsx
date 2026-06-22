@@ -11,9 +11,6 @@ export default function RecommendationsPage() {
   useEffect(() => {
     const stored = localStorage.getItem("recommendation");
 
-<<<<<<< HEAD
-    if (stored && stored !== 'undefined' && stored !== 'null') {
-=======
     console.log("Stored recommendation:", stored);
 
     if (
@@ -21,20 +18,16 @@ export default function RecommendationsPage() {
       stored !== "undefined" &&
       stored !== "null"
     ) {
->>>>>>> 72863adeb1f50c734c9d1ba767df925835094767
       try {
         const parsed = JSON.parse(stored);
         setRecommendation(parsed);
       } catch (error) {
-<<<<<<< HEAD
-        console.error('Failed to parse recommendation:', error);
-        localStorage.removeItem('recommendation');
-=======
         console.error(
           "Failed to parse recommendation:",
           error
         );
->>>>>>> 72863adeb1f50c734c9d1ba767df925835094767
+
+        localStorage.removeItem("recommendation");
       }
     }
   }, []);
