@@ -42,7 +42,7 @@ const inputBlurHandler = (e: React.FocusEvent<HTMLInputElement | HTMLSelectEleme
 
 // -- Main ---------------------------------------------------------------------
 export default function PlannerPage() {
-  // -- All original state — untouched --
+  // -- All original state ï¿½ untouched --
   const [formData, setFormData] = useState<PlannerFormData>({
     location: '',
     soilType: '',
@@ -58,7 +58,7 @@ export default function PlannerPage() {
   const waterOptions = ['High', 'Medium', 'Low'];
   const riskOptions = ['Low', 'Medium', 'High'];
 
-  // -- Original handleSubmit — only added setShowLoader --
+  // -- Original handleSubmit ï¿½ only added setShowLoader --
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setShowLoader(true); // show loading screen
@@ -72,7 +72,6 @@ export default function PlannerPage() {
 
       const data = await response.json();
 
-<<<<<<< HEAD
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
@@ -80,37 +79,21 @@ export default function PlannerPage() {
       if (!data.response) {
         console.error('No response data received:', data);
         alert('Failed to get recommendation: No response data');
-=======
-      console.log("FULL DATA:", data);
-      console.log("data.response:", data.response);
-
-      if (!data.response) {
-        alert(
-          "API did not return a response.\n\n" +
-          JSON.stringify(data, null, 2)
-        );
-
->>>>>>> 72863adeb1f50c734c9d1ba767df925835094767
         setShowLoader(false);
         return;
       }
 
-<<<<<<< HEAD
       console.log('FULL DATA:', data);
       console.log('data.response:', data.response);
-      console.log('API Response:', data);
-      localStorage.setItem('recommendation', JSON.stringify(data.response));
-      console.log('Gemini Response:', data);
-=======
+
       localStorage.setItem(
-        "recommendation",
+        'recommendation',
         JSON.stringify(data.response)
       );
 
-console.log("Saved recommendation:");
-console.log(data.response);
-
->>>>>>> 72863adeb1f50c734c9d1ba767df925835094767
+      console.log('Saved recommendation:');
+      console.log(data.response);
+      
       // navigation happens in onComplete callback below
     } catch (error) {
       console.error(error);
@@ -198,7 +181,7 @@ console.log(data.response);
                     AI-Powered Precision
                   </p>
                   <p className="text-green-300/70 text-xs leading-relaxed">
-                    Soil, water, market & risk — analyzed in seconds to surface your best crop.
+                    Soil, water, market & risk ï¿½ analyzed in seconds to surface your best crop.
                   </p>
                 </div>
               </div>
@@ -302,7 +285,7 @@ console.log(data.response);
                     </select>
                   </Field>
 
-                  {/* Farm Size + Water — 2 col */}
+                  {/* Farm Size + Water ï¿½ 2 col */}
                   <div className="grid grid-cols-2 gap-4">
                     <Field label="Farm Size (acres)">
                       <input
@@ -341,7 +324,7 @@ console.log(data.response);
                     </Field>
                   </div>
 
-                  {/* Budget + Risk — 2 col */}
+                  {/* Budget + Risk ï¿½ 2 col */}
                   <div className="grid grid-cols-2 gap-4">
                     <Field label="Budget (INR)">
                       <input
